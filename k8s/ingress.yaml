@@ -1,0 +1,72 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: clode-studio
+  namespace: clode-studio
+  labels:
+    app.kubernetes.io/name: clode-studio
+    app.kubernetes.io/component: ingress
+  annotations:
+    # NGINX Ingress Controller annotations
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/proxy-body-size: "100m"
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "600"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "600"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
+    nginx.ingress.kubernetes.io/websocket-services: "clode-studio"
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      more_set_headers "X-Frame-Options: SAMEORIGIN";
+      more_set_headers "X-Content-Type-Options: nosniff";
+      more_set_headers "X-XSS-Protection: 1; mode=block";
+    
+    # SSL/TLS configuration
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    
+    # Rate limiting
+    nginx.ingress.kubernetes.io/rate-limit: "100"
+    nginx.ingress.kubernetes.io/rate-limit-rps: "10"
+spec:
+  ingressClassName: nginx
+  tls:
+  - hosts:
+    - clode-studio.yourdomain.com
+    secretName: clode-studio-tls
+  rules:
+  - host: clode-studio.yourdomain.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: clode-studio
+            port:
+              number: 80
+---
+# Alternative ingress for development/staging without TLS
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: clode-studio-dev
+  namespace: clode-studio
+  labels:
+    app.kubernetes.io/name: clode-studio
+    app.kubernetes.io/component: ingress-dev
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/proxy-body-size: "100m"
+    nginx.ingress.kubernetes.io/websocket-services: "clode-studio"
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: clode-studio-dev.yourdomain.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: clode-studio
+            port:
+              number: 80

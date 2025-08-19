@@ -1,0 +1,60 @@
+# Development files
+node_modules
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Build outputs
+dist
+.output
+.nuxt
+
+# Environment files
+.env
+.env.local
+.env.build
+
+# IDE files
+.vscode
+.idea
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Git
+.git
+.gitignore
+
+# Documentation
+docs
+*.md
+!README.md
+
+# Images and assets not needed for runtime
+images
+examples
+
+# Scripts not needed in container (but keep download-ripgrep.js)
+scripts
+!scripts/download-ripgrep.js
+
+# Test files
+test
+tests
+*.test.js
+*.spec.js
+
+# Electron development files
+electron-builder.yml
+.electron-gyp
+
+# CI/CD files
+.github
+
+# Other
+.eslintrc*
+.prettierrc*
+.editorconfig

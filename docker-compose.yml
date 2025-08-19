@@ -1,0 +1,48 @@
+version: '3.8'
+
+services:
+  clode-studio:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: clode-studio
+    ports:
+      - "3000:3000"
+    environment:
+      - CLODE_MODE=headless
+      - CLODE_WORKSPACE_PATH=/workspace
+      - RELAY_TYPE=CLODE
+    volumes:
+      - ./workspace:/workspace
+      - clode-data:/app/.claude
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Optional: reverse proxy with SSL
+  nginx:
+    image: nginx:alpine
+    container_name: clode-nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./ssl:/etc/nginx/ssl:ro
+    depends_on:
+      - clode-studio
+    restart: unless-stopped
+    profiles:
+      - proxy
+
+volumes:
+  clode-data:
+    driver: local
+
+networks:
+  default:
+    name: clode-network

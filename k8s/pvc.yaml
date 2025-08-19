@@ -1,0 +1,31 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: clode-studio-workspace
+  namespace: clode-studio
+  labels:
+    app.kubernetes.io/name: clode-studio
+    app.kubernetes.io/component: storage
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 10Gi
+  storageClassName: fast-ssd # Adjust based on your cluster's storage classes
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: clode-studio-data
+  namespace: clode-studio
+  labels:
+    app.kubernetes.io/name: clode-studio
+    app.kubernetes.io/component: storage
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+  storageClassName: fast-ssd # For application data and configurations

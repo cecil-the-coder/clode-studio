@@ -1,0 +1,41 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: clode-studio
+  namespace: clode-studio
+  labels:
+    app.kubernetes.io/name: clode-studio
+    app.kubernetes.io/component: service
+  annotations:
+    service.beta.kubernetes.io/aws-load-balancer-type: "nlb"
+    service.beta.kubernetes.io/aws-load-balancer-backend-protocol: "tcp"
+spec:
+  type: ClusterIP
+  ports:
+  - name: http
+    port: 80
+    targetPort: http
+    protocol: TCP
+  selector:
+    app.kubernetes.io/name: clode-studio
+    app.kubernetes.io/component: app
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: clode-studio-headless
+  namespace: clode-studio
+  labels:
+    app.kubernetes.io/name: clode-studio
+    app.kubernetes.io/component: headless-service
+spec:
+  type: ClusterIP
+  clusterIP: None
+  ports:
+  - name: http
+    port: 3000
+    targetPort: http
+    protocol: TCP
+  selector:
+    app.kubernetes.io/name: clode-studio
+    app.kubernetes.io/component: app

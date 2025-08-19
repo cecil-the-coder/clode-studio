@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: clode-studio
+  labels:
+    app.kubernetes.io/name: clode-studio
+    app.kubernetes.io/part-of: clode-studio
+  annotations:
+    description: "Namespace for Clode Studio AI-powered IDE"

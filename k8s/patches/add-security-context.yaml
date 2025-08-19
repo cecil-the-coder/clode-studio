@@ -1,0 +1,16 @@
+apiVersion: builtin
+kind: PatchTransformer
+metadata:
+  name: add-security-context
+patch: |-
+  - op: add
+    path: /spec/template/spec/securityContext/seccompProfile
+    value:
+      type: RuntimeDefault
+  - op: add
+    path: /spec/template/spec/containers/0/securityContext/seccompProfile
+    value:
+      type: RuntimeDefault
+target:
+  kind: Deployment
+  name: clode-studio

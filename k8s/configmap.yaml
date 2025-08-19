@@ -1,0 +1,27 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: clode-studio-config
+  namespace: clode-studio
+  labels:
+    app.kubernetes.io/name: clode-studio
+    app.kubernetes.io/component: config
+data:
+  # Application configuration
+  CLODE_MODE: "headless"
+  CLODE_WORKSPACE_PATH: "/workspace"
+  RELAY_TYPE: "CLODE"
+  CLODE_TELEMETRY: "false"
+  
+  # Node.js configuration
+  NODE_ENV: "production"
+  PORT: "3000"
+  
+  # Display configuration for headless mode
+  DISPLAY: ":99"
+  
+  # Security settings
+  CLODE_DISABLE_TELEMETRY: "true"
+  
+  # Performance tuning
+  NODE_OPTIONS: "--max-old-space-size=2048"
